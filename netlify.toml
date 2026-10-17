@@ -1,0 +1,29 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# El service worker de FCM debe servirse desde la raíz y sin cache agresivo.
+[[headers]]
+  for = "/firebase-messaging-sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+
+# No publicar archivos del backend ni de configuración como estáticos.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/firestore.rules"
+  to = "/404.html"
+  status = 404

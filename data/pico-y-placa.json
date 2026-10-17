@@ -1,0 +1,15 @@
+{
+  "ciudad": "Medellín y Valle de Aburrá",
+  "vigencia": "Del 3 de agosto de 2026 a enero de 2027 (segundo semestre 2026)",
+  "fuente": "Secretaría de Movilidad de Medellín / Área Metropolitana del Valle de Aburrá",
+  "actualizado": "2026-10-17",
+  "horario": "Lunes a viernes de 5:00 a. m. a 8:00 p. m.",
+  "nota": "Carros: último dígito de la placa. Motos de 2 y 4 tiempos: primer dígito de la placa. No aplica en festivos ni fines de semana.",
+  "rotacion": {
+    "1": [5, 8],
+    "2": [1, 4],
+    "3": [0, 2],
+    "4": [3, 6],
+    "5": [7, 9]
+  }
+}

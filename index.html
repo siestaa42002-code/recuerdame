@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Recuérdame">
+  <title>Recuérdame</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Pantalla de inicio de sesión -->
+  <section id="vista-login" class="vista vista-login">
+    <div class="login-card">
+      <img src="/icons/icon-192.png" alt="" class="login-logo">
+      <h1>Recuérdame</h1>
+      <p>Renovaciones, fechas importantes y pico y placa, con avisos cuando tú quieras.</p>
+      <button id="btn-login" class="btn btn-primary btn-block">Entrar con Google</button>
+      <p id="login-error" class="error oculto"></p>
+    </div>
+  </section>
+
+  <!-- App principal -->
+  <section id="vista-app" class="vista oculto">
+
+    <header class="topbar">
+      <div class="topbar-titulo">
+        <h1>Recuérdame</h1>
+        <span id="usuario-nombre" class="muted"></span>
+      </div>
+      <button id="btn-logout" class="btn btn-ghost" title="Cerrar sesión">Salir</button>
+    </header>
+
+    <!-- Aviso de notificaciones -->
+    <div id="banner-notif" class="banner oculto">
+      <span id="banner-notif-texto">Activa las notificaciones para recibir los avisos en este dispositivo.</span>
+      <button id="btn-activar-notif" class="btn btn-small">Activar</button>
+    </div>
+
+    <main class="contenido">
+
+      <!-- Pestaña: Inicio -->
+      <div id="tab-inicio" class="tab">
+
+        <div id="card-pyp" class="card card-pyp oculto">
+          <div class="card-pyp-head">
+            <span class="chip">Pico y placa</span>
+            <span id="pyp-placa" class="muted"></span>
+          </div>
+          <p id="pyp-estado" class="pyp-estado"></p>
+          <p id="pyp-detalle" class="muted"></p>
+        </div>
+
+        <h2 class="seccion-titulo">Próximos</h2>
+        <ul id="lista-proximos" class="lista"></ul>
+        <p id="vacio-proximos" class="vacio oculto">No tienes recordatorios activos. Agrega el primero con el botón +.</p>
+      </div>
+
+      <!-- Pestaña: Todos -->
+      <div id="tab-todos" class="tab oculto">
+        <div class="filtros">
+          <button class="filtro activo" data-cat="todas">Todas</button>
+          <button class="filtro" data-cat="documento">Documentos</button>
+          <button class="filtro" data-cat="fecha">Fechas</button>
+          <button class="filtro" data-cat="pago">Pagos</button>
+          <button class="filtro" data-cat="otro">Otros</button>
+        </div>
+        <ul id="lista-todos" class="lista"></ul>
+        <p id="vacio-todos" class="vacio oculto">Nada por aquí todavía.</p>
+      </div>
+
+      <!-- Pestaña: Ajustes -->
+      <div id="tab-ajustes" class="tab oculto">
+
+        <h2 class="seccion-titulo">Notificaciones</h2>
+        <div class="card">
+          <label class="fila-toggle">
+            <span>
+              <strong>Recibir notificaciones</strong>
+              <small>Interruptor general. Si está apagado no llega nada.</small>
+            </span>
+            <input type="checkbox" class="toggle" id="aj-notif-global">
+          </label>
+          <div class="fila">
+            <label for="aj-hora">Hora de los avisos diarios</label>
+            <select id="aj-hora"></select>
+          </div>
+          <div class="fila">
+            <label for="aj-hora-noche">Hora del aviso de la noche anterior</label>
+            <select id="aj-hora-noche"></select>
+          </div>
+        </div>
+
+        <h2 class="seccion-titulo">Categorías</h2>
+        <div class="card">
+          <label class="fila-toggle">
+            <span><strong>Documentos</strong><small>SOAT, licencia, pasaporte, tecnomecánica, etc.</small></span>
+            <input type="checkbox" class="toggle" data-cat-toggle="documento">
+          </label>
+          <label class="fila-toggle">
+            <span><strong>Fechas importantes</strong><small>Cumpleaños, aniversarios, citas.</small></span>
+            <input type="checkbox" class="toggle" data-cat-toggle="fecha">
+          </label>
+          <label class="fila-toggle">
+            <span><strong>Pagos</strong><small>Impuestos, suscripciones, cuotas.</small></span>
+            <input type="checkbox" class="toggle" data-cat-toggle="pago">
+          </label>
+          <label class="fila-toggle">
+            <span><strong>Otros</strong><small>Lo que no encaje arriba.</small></span>
+            <input type="checkbox" class="toggle" data-cat-toggle="otro">
+          </label>
+        </div>
+
+        <h2 class="seccion-titulo">Pico y placa</h2>
+        <div class="card">
+          <label class="fila-toggle">
+            <span><strong>Avisarme del pico y placa</strong><small>Usa la rotación vigente de Medellín y el Valle de Aburrá.</small></span>
+            <input type="checkbox" class="toggle" id="aj-pyp-activo">
+          </label>
+          <div class="fila">
+            <label for="aj-pyp-placa">Placa</label>
+            <input type="text" id="aj-pyp-placa" placeholder="ABC123" maxlength="7" autocapitalize="characters">
+          </div>
+          <div class="fila">
+            <label for="aj-pyp-tipo">Tipo de vehículo</label>
+            <select id="aj-pyp-tipo">
+              <option value="carro">Carro (último dígito)</option>
+              <option value="moto">Moto (primer dígito)</option>
+            </select>
+          </div>
+          <label class="fila-toggle">
+            <span><strong>Aviso la noche anterior</strong><small>Para que no te cojan las 5:00 a. m. con el carro afuera.</small></span>
+            <input type="checkbox" class="toggle" id="aj-pyp-noche">
+          </label>
+          <label class="fila-toggle">
+            <span><strong>Aviso en la mañana</strong><small>A la hora de los avisos diarios.</small></span>
+            <input type="checkbox" class="toggle" id="aj-pyp-manana">
+          </label>
+          <label class="fila-toggle">
+            <span><strong>Ignorar festivos</strong><small>Los festivos no hay pico y placa; no se avisa.</small></span>
+            <input type="checkbox" class="toggle" id="aj-pyp-festivos">
+          </label>
+
+          <details class="rotacion">
+            <summary>Rotación <span id="rotacion-origen" class="muted"></span></summary>
+            <p class="muted small">La app carga la rotación oficial automáticamente. Si cambia y aún no se ha actualizado, puedes escribir aquí los dígitos de cada día (separados por coma). Deja vacío para volver a la automática.</p>
+            <div class="rotacion-grid">
+              <label>Lunes <input type="text" data-dia="1" placeholder="5, 8"></label>
+              <label>Martes <input type="text" data-dia="2" placeholder="1, 4"></label>
+              <label>Miércoles <input type="text" data-dia="3" placeholder="0, 2"></label>
+              <label>Jueves <input type="text" data-dia="4" placeholder="3, 6"></label>
+              <label>Viernes <input type="text" data-dia="5" placeholder="7, 9"></label>
+            </div>
+            <button id="btn-guardar-rotacion" class="btn btn-small">Guardar rotación personalizada</button>
+            <button id="btn-limpiar-rotacion" class="btn btn-small btn-ghost">Usar la automática</button>
+          </details>
+        </div>
+
+        <h2 class="seccion-titulo">Dispositivos</h2>
+        <div class="card">
+          <p class="muted small">Cada dispositivo donde actives las notificaciones queda registrado y recibe los avisos.</p>
+          <p id="dispositivos-conteo" class="muted small"></p>
+          <button id="btn-probar-notif" class="btn btn-small">Enviar notificación de prueba</button>
+        </div>
+
+        <p class="muted small centro">Versión 1.0 · Hecho con Firebase y Netlify</p>
+      </div>
+
+    </main>
+
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+      <button class="nav-btn activo" data-tab="inicio">Inicio</button>
+      <button class="nav-btn" data-tab="todos">Todos</button>
+      <button id="btn-nuevo" class="nav-fab" title="Nuevo recordatorio">+</button>
+      <button class="nav-btn" data-tab="ajustes">Ajustes</button>
+    </nav>
+  </section>
+
+  <!-- Hoja para crear / editar recordatorio -->
+  <div id="sheet-form" class="sheet oculto">
+    <div class="sheet-fondo" data-cerrar></div>
+    <form id="form-recordatorio" class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <h2 id="form-titulo">Nuevo recordatorio</h2>
+      <input type="hidden" id="f-id">
+
+      <div class="fila">
+        <label for="f-titulo">Título</label>
+        <input type="text" id="f-titulo" required placeholder="Renovar SOAT">
+      </div>
+
+      <div class="fila">
+        <label>Categoría</label>
+        <div class="chips" id="f-categoria">
+          <button type="button" class="chip-sel activo" data-val="documento">Documento</button>
+          <button type="button" class="chip-sel" data-val="fecha">Fecha</button>
+          <button type="button" class="chip-sel" data-val="pago">Pago</button>
+          <button type="button" class="chip-sel" data-val="otro">Otro</button>
+        </div>
+      </div>
+
+      <div class="fila">
+        <label for="f-fecha">Fecha</label>
+        <input type="date" id="f-fecha" required>
+      </div>
+
+      <label class="fila-toggle">
+        <span><strong>Se repite cada año</strong><small>Cumpleaños, SOAT, tecnomecánica.</small></span>
+        <input type="checkbox" class="toggle" id="f-anual">
+      </label>
+
+      <div class="fila">
+        <label>Avisarme con anticipación</label>
+        <div class="chips" id="f-avisos">
+          <button type="button" class="chip-sel" data-val="30">30 días</button>
+          <button type="button" class="chip-sel" data-val="15">15 días</button>
+          <button type="button" class="chip-sel activo" data-val="7">7 días</button>
+          <button type="button" class="chip-sel activo" data-val="1">1 día</button>
+          <button type="button" class="chip-sel activo" data-val="0">El mismo día</button>
+        </div>
+      </div>
+
+      <div class="fila">
+        <label for="f-notas">Notas (opcional)</label>
+        <textarea id="f-notas" rows="2" placeholder="Número de póliza, enlace para pagar..."></textarea>
+      </div>
+
+      <label class="fila-toggle">
+        <span><strong>Activo</strong><small>Si lo apagas no se envían avisos, pero se conserva.</small></span>
+        <input type="checkbox" class="toggle" id="f-activo" checked>
+      </label>
+
+      <div class="acciones">
+        <button type="button" id="btn-eliminar" class="btn btn-danger oculto">Eliminar</button>
+        <button type="button" class="btn btn-ghost" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="toast" class="toast oculto"></div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
